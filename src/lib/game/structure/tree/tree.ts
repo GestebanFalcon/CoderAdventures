@@ -33,9 +33,9 @@ export default class Tree extends Structure {
         if (this.fruitCount === 0) {
             return;
         }
-        if (Math.random() < 0.5) {
-            return;
-        }
+        // if (Math.random() < 0.5) {
+        //     return;
+        // }
         this.fruitCount--;
         return (new Fruit({ type: this.type }));
     }

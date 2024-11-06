@@ -92,7 +92,7 @@ export default class Level {
         await this.board.render();
     }
 
-    move(direction: string) {
+    public move(direction: string) {
         this.mainCharacter.move(direction);
         console.log(this.mainCharacter.getTileCoords());
         if (this.winCon.substring(0, 4) === "move") {
@@ -107,6 +107,9 @@ export default class Level {
             }
 
         }
+    }
+    public shake() {
+        return this.mainCharacter.shakeTreeBeta();
     }
     public getNumber() {
         return this.number;

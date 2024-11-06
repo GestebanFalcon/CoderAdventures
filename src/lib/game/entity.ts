@@ -1,4 +1,4 @@
-import { Application, Sprite, Assets, AnimatedSprite } from "pixi.js";
+import { Application, Sprite, Assets, AnimatedSprite, Texture } from "pixi.js";
 import Board from "./board";
 import Fruit from "./structure/tree/fruit";
 import Item from "./item";
@@ -25,9 +25,11 @@ export default class Entity {
     private health: number;
     private maxHealth: number;
     private inventory: Fruit[];
-    private dimensions?: [number, number]
+    private heldItem?: Fruit;
+    private dimensions?: [number, number];
+    private openTexture?: string;
 
-    constructor({ board, app, texture, me, startingCoords, maxHealth, dimensions, textures }: { board: Board, app: Application, texture: string, me: boolean, startingCoords?: [number, number], dimensions?: [number, number], maxHealth: number, textures?: string[] }) {
+    constructor({ board, app, texture, me, startingCoords, maxHealth, dimensions, textures, openTexture }: { board: Board, app: Application, texture: string, me: boolean, startingCoords?: [number, number], dimensions?: [number, number], maxHealth: number, textures?: string[], openTexture?: string }) {
         this.textures = (textures ? [texture, ...textures] : [texture]);
         if (dimensions) {
             this.dimensions = dimensions;
@@ -50,9 +52,10 @@ export default class Entity {
         }
         this.getTile()?.addEntity(this);
         this.texture = texture;
+        openTexture && (this.openTexture = openTexture);
         // this.init(app);
         this.sprite = new Sprite();
-
+        Assets.load(this.textures);
     }
     public async render() {
 
@@ -222,6 +225,32 @@ export default class Entity {
 
 
         }
+    }
+    public shakeTreeBeta(): string {
+        if (this.getTile()?.structure?.shake) {
+
+            console.log("is tree");
+
+            const fruit: Fruit = this.getTile()?.structure!.shake!();
+            //typescript when i literally just checked for it O:
+            if (fruit) {
+                this.openTexture && (this.sprite.texture = Texture.from(this.openTexture))
+                setTimeout(() => {
+                    this.inventory.push(fruit);
+                }, 200)
+                console.log(fruit);
+                console.log(this.inventory);
+                this.sprite.texture = Texture.from(this.texture);
+                return fruit.getType();
+
+            } else {
+                console.log("no fruit :(");
+
+            }
+
+
+        }
+        return ("");
     }
     public setTileCoords(coords: [number, number]) {
         this.tileCoords = [...coords];

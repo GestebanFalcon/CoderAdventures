@@ -3,7 +3,7 @@
 import Interpreter from "js-interpreter";
 import { useBlocklyWorkspace } from "react-blockly";
 import * as Blockly from "blockly"
-import { javascriptGenerator } from "blockly/javascript";
+import { javascriptGenerator, Order } from "blockly/javascript";
 import GameDisplay from "@/components/activityDisplay/gameDisplay/gameDisplay";
 import { Workspace } from "@/components/activityDisplay/googleBlockly/workspace";
 import { useEffect, useState, useRef } from "react";
@@ -13,6 +13,7 @@ import { Direction } from "@/lib/game/entity";
 import Tree from "@/lib/game/structure/tree/tree";
 import Tile, { TileType } from "@/lib/game/tile";
 import Link from "next/link";
+import Fruit from "@/lib/game/structure/tree/fruit";
 
 export default function Display({ levelNumber, adventureName }: { levelNumber: number, adventureName: string }) {
 
@@ -85,6 +86,44 @@ export default function Display({ levelNumber, adventureName }: { levelNumber: n
         return code
     }
 
+    Blockly.Blocks['inventory_item'] = {
+        init: function () {
+            this.appendDummyInput()
+                .appendField("InventoryItem")
+            this.setOutput(true)
+        }
+
+    }
+    javascriptGenerator.forBlock['inventory_item'] = function (block: Blockly.Block, generator: Blockly.Generator) {
+        const code = `inventoryItem()`;
+        return [code, Order.ATOMIC]
+    }
+
+    Blockly.Blocks['print'] = {
+        init: function () {
+            this.appendValueInput('TEXT')
+                .appendField("Print: ")
+        }
+    }
+    javascriptGenerator.forBlock['print'] = function (block: Blockly.Block, generator: Blockly.Generator) {
+        const text = generator.valueToCode(block, 'TEXT', Order.ATOMIC);
+        const code = `print(${text});`;
+        return code
+    }
+    Blockly.Blocks['shake'] = {
+        init: function () {
+            this.appendDummyInput()
+                .appendField("Shake Tree")
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+
+        }
+    }
+    javascriptGenerator.forBlock['shake'] = function (block: Blockly.Block, generator: Blockly.Generator) {
+        const code = `testDelay();`
+        return code
+    }
+
 
     const toolbox = {
         // There are two kinds of toolboxes. The simpler one is a flyout toolbox.
@@ -114,7 +153,25 @@ export default function Display({ levelNumber, adventureName }: { levelNumber: n
             {
                 kind: 'block',
                 type: 'move_down'
+            },
+            {
+                kind: 'block',
+                type: 'print',
+            },
+            {
+                kind: 'block',
+                type: 'inventory_item'
+            },
+            {
+                kind: 'block',
+                type: 'logic_compare'
+            },
+            {
+                kind: 'block',
+                type: 'shake'
             }
+
+
             // You can add more blocks to this array.
         ]
     };
@@ -196,6 +253,36 @@ export default function Display({ levelNumber, adventureName }: { levelNumber: n
             return (level.move("down"));
         }
         interpreter.setProperty(globalObject, 'moveDown', interpreter.createNativeFunction(wrapper));
+
+        wrapper = function inventoryItem() {
+            return ("mango");
+        }
+        interpreter.setProperty(globalObject, 'inventoryItem', interpreter.createNativeFunction(wrapper));
+
+        var shakeTreeWrapper = function shakeTree() {
+            level.shake();
+        }
+        interpreter.setProperty(globalObject, 'shakeTree', interpreter.createNativeFunction(shakeTreeWrapper));
+
+        // const sleep = (ms: number) => {
+        //     return new Promise(resolve => setTimeout(resolve, ms));
+        // }
+
+        var testDelayWrapper = function testDelay() {
+            console.log("start")
+            console.log("end")
+            return (console.log("hi"))
+        }
+        interpreter.setProperty(globalObject, 'testDelay', interpreter.createNativeFunction(testDelayWrapper))
+
+
+
+        var printWrapper = function print(text: any) {
+            return (console.log(text))
+        }
+        interpreter.setProperty(globalObject, 'print', interpreter.createNativeFunction(printWrapper)
+
+        )
     }
 
     const runCode = () => {
