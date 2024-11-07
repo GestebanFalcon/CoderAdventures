@@ -12,7 +12,20 @@ export async function POST(req: NextRequest) {
         levelJSON: LevelJSON
     } = body;
 
-    const oldLevel = await prisma.level.findFirst({ where: { index: levelJSON.index } });
+    console.log(levelJSON);
+    const oldLevel = await prisma.level.findFirst({
+        where:
+        {
+            AND: [
+                {
+                    index: levelJSON.index
+                },
+                {
+                    adventureName: levelJSON.adventureName
+                }
+            ]
+        }
+    });
 
     if (oldLevel) {
         await prisma.level.deleteMany({ where: { index: levelJSON.index } });
@@ -56,7 +69,8 @@ export async function POST(req: NextRequest) {
                 connect: tileList,
             },
             mainCoords: levelJSON.mainCoords,
-            winCon: levelJSON.winCon
+            winCon: levelJSON.winCon,
+            adventureName: levelJSON.adventureName
         }
     });
 

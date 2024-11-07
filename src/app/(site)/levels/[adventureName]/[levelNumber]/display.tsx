@@ -8,15 +8,15 @@ import GameDisplay from "@/components/activityDisplay/gameDisplay/gameDisplay";
 import { Workspace } from "@/components/activityDisplay/googleBlockly/workspace";
 import { useEffect, useState, useRef } from "react";
 import { Application } from "pixi.js";
-import Level from "@/lib/game/level";
+import Level, { LevelJSON } from "@/lib/game/level";
 import { Direction } from "@/lib/game/entity";
 import Tree from "@/lib/game/structure/tree/tree";
 import Tile, { TileType } from "@/lib/game/tile";
 import Link from "next/link";
 import Fruit from "@/lib/game/structure/tree/fruit";
 
-export default function Display({ levelNumber, adventureName }: { levelNumber: number, adventureName: string }) {
-
+export default function Display({ oldLevelNumber, adventureName }: { oldLevelNumber: string, adventureName: string }) {
+    const levelNumber = parseInt(oldLevelNumber);
 
     const workspaceRef = useRef(null);
 
@@ -189,16 +189,14 @@ export default function Display({ levelNumber, adventureName }: { levelNumber: n
             // await app.init({ width: 390, height: 390 })
             // document.getElementById("stageDiv")?.appendChild(app.canvas);
 
-            const res = await fetch(`/api/getLevel/${levelNumber}`);
+            const res = await fetch(`/api/getLevel/${adventureName}/${levelNumber}`);
             const body = await res.json();
             const { levelJSON } = body;
             console.log(body);
-            console.log(levelJSON);
 
             await level.init();
 
             if (levelJSON) {
-                console.log(level);
                 const newLevel = Level.fromJSON({ setIsComplete, tiles: levelJSON.tiles, index: levelJSON.index, mainCoords: levelJSON.mainCoords, dimensions: levelJSON.dimensions, app: level.app, winCon: levelJSON.winCon });
                 console.log(newLevel);
                 setLevel(prevLevel => {

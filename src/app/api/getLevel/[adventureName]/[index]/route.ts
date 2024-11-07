@@ -1,25 +1,26 @@
+import { LevelJSON } from "@/lib/game/level";
 import prisma from "@/lib/prismadb";
 import { useSearchParams } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { index: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { index: string, adventureName: string } }) {
 
-    console.log("getting yay")
 
-    if (!params.index) {
+    if (!parseInt(params.index)) {
         return NextResponse.json({ error: "Missing Data: index" }, { status: 400 });
     }
 
-    const index = params.index;
-
-
-    if (!(parseInt(index))) {
-        return NextResponse.json({ error: "Invalid Data: index" }, { status: 400 });
-    }
 
     const level = await prisma.level.findFirst({
         where: {
-            index: parseInt(index)
+            AND: [
+                {
+                    index: parseInt(params.index)
+                },
+                {
+                    adventureName: params.adventureName
+                }
+            ]
         }
     });
 
@@ -32,11 +33,14 @@ export async function GET(req: NextRequest, { params }: { params: { index: strin
             structure: true
         },
     });
+
+
+
     const fullLevel = { ...level, tiles: tileList };
 
     console.log("level");
     console.log(level);
-    console.log(fullLevel);
+
     if (!fullLevel) {
         return NextResponse.json({ error: "Level does not exist" }, { status: 404 });
     }

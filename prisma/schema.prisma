@@ -46,10 +46,13 @@ model Level {
 
     tiles Tile[]
 
-    index      Int
-    dimensions Int[]
-    mainCoords Int[]
-    winCon     String
+    index         Int
+    dimensions    Int[]
+    mainCoords    Int[]
+    winCon        String
+    adventureName String
+
+    @@unique([index, adventureName])
 }
 
 model Review {

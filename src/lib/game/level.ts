@@ -14,7 +14,8 @@ export type LevelJSON = {
     index: number,
     dimensions: [number, number],
     mainCoords: [number, number],
-    winCon: string
+    winCon: string,
+    adventureName: string
 
 }
 
@@ -129,7 +130,7 @@ export default class Level {
         console.log(board.board[mainCoords[0]][mainCoords[1]]);
         return new Level(index, app, setIsComplete, dimensions, winCon, board, board.board[mainCoords[0]][mainCoords[1]].getEntities()[0]);
     }
-    public toJSON(): LevelJSON {
+    public toJSON(adventureName: string): LevelJSON {
 
         const tileList: {
             entities: {
@@ -160,7 +161,8 @@ export default class Level {
                 index: this.number,
                 dimensions: this.dimensions,
                 mainCoords: this.mainCharacter.getTileCoords(),
-                winCon: this.winCon
+                winCon: this.winCon,
+                adventureName
             }
         )
     }

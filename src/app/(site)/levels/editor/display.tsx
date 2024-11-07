@@ -32,7 +32,13 @@ export default function Display() {
     const entities = ["https://i.postimg.cc/rmXbRc1v/johnathmald.png"]
 
     const searchParams = useSearchParams();
-    const levelNumber = searchParams.get('levelNumber');
+    const paramLevelNumber = searchParams.get('levelNumber');
+    const paramAdventureName = searchParams.get('adventureName');
+
+
+    const [levelNumber, setLevelNumber] = useState(paramLevelNumber ? parseInt(paramLevelNumber) : 1);
+    const [adventureName, setAdventureName] = useState(paramAdventureName ? paramAdventureName : "beta");
+
     let newNumber;
 
     if (!levelNumber) {
@@ -131,9 +137,9 @@ export default function Display() {
 
     const saveLevel = async () => {
         console.log(levelNumber);
-        const levelJSON = level.toJSON();
+        const levelJSON = level.toJSON(adventureName ? adventureName : "beta");
         console.log(levelJSON);
-        await fetch("/api/createLevel", { method: "POST", body: JSON.stringify({ levelJSON }) });
+        await fetch("/api/createLevel", { method: "POST", body: JSON.stringify({ levelJSON: { ...levelJSON, adventureName } }) });
     }
 
     return (
@@ -155,6 +161,9 @@ export default function Display() {
                         <button onClick={saveLevel} className="mt-12 text-lg rounded-lg bg-yellow-300 font-bold text-slate-900 p-4">
                             Save
                         </button>
+                        <input type="number" value={levelNumber} onChange={(e) => { setLevelNumber(parseInt(e.target.value)) }}></input>
+                        <input value={adventureName} onChange={e => { setAdventureName(e.target.value) }}></input>
+
                         <button onClick={async () => {
                             console.log(level.board.board[coords[0]][coords[1]]);
                             level.board.board[coords[0]][coords[1]].deRender();
