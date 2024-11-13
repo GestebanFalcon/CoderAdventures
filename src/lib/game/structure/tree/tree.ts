@@ -15,14 +15,16 @@ export default class Tree extends Structure {
 
     private fruitCount: number;
     private type: string;
+    private fruitOrder?: string[]
 
-    constructor({ texture, type, app }: { texture: string, type: string, app: Application }) {
+    constructor({ texture, type, app, fruitOrder }: { texture: string, type: string, app: Application, fruitOrder?: string[] }) {
 
         super({ texture, app })
         this.fruitCount = Math.round(Math.random() * 5) + 5;
         this.type = type;
         this.isTree = true;
 
+        fruitOrder && (this.fruitOrder = fruitOrder);
     }
 
     public interact(): void {
@@ -37,7 +39,12 @@ export default class Tree extends Structure {
         //     return;
         // }
         this.fruitCount--;
-        return (new Fruit({ type: this.type }));
+        const fruit = new Fruit({
+            type: (this.fruitOrder ? (
+                this.fruitOrder[(this.fruitCount % this.fruitOrder.length)]
+            ) : this.type)
+        });
+        return (fruit);
     }
 
     public clone() {
@@ -48,14 +55,15 @@ export default class Tree extends Structure {
         const json = {
             isTree: true,
             treeType: this.type,
-            texture: this.texture
+            texture: this.texture,
+            fruitOrder: this.fruitOrder && this.fruitOrder
         }
         return json;
     }
 
-    public static fromJSON({ treeType, texture, app }: { treeType?: string, texture: string, app: Application }): any {
+    public static fromJSON({ treeType, texture, app, fruitOrder }: { treeType?: string, texture: string, app: Application, fruitOrder?: string[] }): any {
         if (treeType) {
-            return new Tree({ type: treeType, texture, app: app });
+            return new Tree({ type: treeType, texture, app: app, fruitOrder: fruitOrder });
         }
     }
 

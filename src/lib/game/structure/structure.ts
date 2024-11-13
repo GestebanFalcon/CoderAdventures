@@ -42,6 +42,16 @@ export default class Structure {
     public clone(): Structure {
         return new Structure({ texture: this.texture, app: this.app });
     }
-
+    public toJSON(): {
+        isTree: boolean;
+        treeType?: string;
+        texture: string;
+        fruitOrder?: string[];
+    } {
+        return ({
+            isTree: false,
+            texture: this.texture,
+        })
+    }
 
 }  

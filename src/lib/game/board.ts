@@ -34,7 +34,7 @@ export default class Board {
                         entities: entitiesList,
 
                     }
-                    currentTile.structure && (options.structure = Tree.fromJSON({ treeType: currentTile.structure.treeType, texture: currentTile.structure.texture, app: this.app }))
+                    currentTile.structure && (options.structure = Tree.fromJSON({ treeType: currentTile.structure.treeType, texture: currentTile.structure.texture, app: this.app, fruitOrder: currentTile.structure.fruitOrder }))
                     //I shouldn't need to spread here but I'll put a comment just in case it breaks.
                     this.board[i][j] = new Tile(options);
                 }

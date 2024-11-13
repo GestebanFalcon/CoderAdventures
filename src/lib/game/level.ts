@@ -132,20 +132,7 @@ export default class Level {
     }
     public toJSON(adventureName: string): LevelJSON {
 
-        const tileList: {
-            entities: {
-                maxHealth: number,
-                texture: string,
-                mainCharacter: boolean,
-            }[],
-            index: [number, number],
-            structure?: {
-                texture: string,
-                treeType?: string,
-            },
-            texture: string,
-            type: "GROUND" | "VOID" | "WALL"
-        }[] = []
+        const tileList: TileJSON[] = []
 
         for (let i = 0; i < this.board.board.length; i++) {
             for (let j = 0; j < this.board.board[i].length; j++) {

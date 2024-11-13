@@ -17,6 +17,8 @@ export type TileJSON = {
     structure?: {
         texture: string,
         treeType?: string,
+        isTree: boolean,
+        fruitOrder?: string[]
     },
     texture: string,
     type: "GROUND" | "WALL" | "VOID"
@@ -172,7 +174,7 @@ export default class Tile {
             ),
             index,
             texture: this.texture,
-            structure: this.structure,
+            structure: this.structure?.toJSON(),
             type: TileType[this.tileType]
         })
     }

@@ -28,7 +28,7 @@ export default function Display() {
 
 
     const tiles: [string, TileType][] = [["https://i.postimg.cc/hjLY9wMh/default-Grass-Large.png", TileType.GROUND], ["https://i.postimg.cc/WbPVJmRy/water-Base.png", TileType.VOID], ["https://i.postimg.cc/GmXnNZB0/sandBase.png", TileType.GROUND], ["https://i.postimg.cc/3RvMkNt7/sand-Coast-Full-Right.png", TileType.GROUND], ["https://i.postimg.cc/nVYNsyny/sand-Coast-Full-Bottom.png", TileType.GROUND], ["https://i.postimg.cc/W4tcPXrd/sand-Coast-Out-Top-Left.png", TileType.GROUND], ["https://i.postimg.cc/tgfQRWt2/sand-Coast-Bottom-Right.png", TileType.GROUND], ["https://i.postimg.cc/8cxXb3w3/sand-Coast-Full-Middle.png", TileType.GROUND], ["https://i.postimg.cc/RVQB134Z/sand-Coast-Full-Top.png", TileType.GROUND], ["https://i.postimg.cc/hjDGSZLH/grass-Base.png", TileType.GROUND], ["https://i.postimg.cc/1zct11qG/grass-On-Sand-Full-Right.png", TileType.GROUND]];
-    const structures = ["https://i.postimg.cc/rmXbRc1v/johnathmald.png", "https://static.vecteezy.com/system/resources/thumbnails/026/795/005/small/mango-fruit-tropical-transparent-png.png", "https://i.postimg.cc/zvvGXfMY/palmTree.png"]
+    const structures: [string, string[]?][] = [["https://i.postimg.cc/rmXbRc1v/johnathmald.png"], ["https://static.vecteezy.com/system/resources/thumbnails/026/795/005/small/mango-fruit-tropical-transparent-png.png"], ["https://i.postimg.cc/zvvGXfMY/palmTree.png"], ["https://i.postimg.cc/zvvGXfMY/palmTree.png", ["pear", "mango", "coconut"]]]
     const entities = ["https://i.postimg.cc/rmXbRc1v/johnathmald.png"]
 
     const searchParams = useSearchParams();
@@ -92,7 +92,7 @@ export default function Display() {
         }
         if (mode === "structure") {
             currentTile.structure?.deRender();
-            currentTile.structure = new Tree({ texture: structures[textures.structure], type: "mango", app: level.app });
+            currentTile.structure = new Tree({ texture: structures[textures.structure][0], type: "mango", app: level.app, fruitOrder: structures[textures.structure][1] && structures[textures.structure][1] });
             console.log(currentTile);
             await currentTile.reRender();
 
@@ -139,7 +139,7 @@ export default function Display() {
         console.log(levelNumber);
         const levelJSON = level.toJSON(adventureName ? adventureName : "beta");
         console.log(levelJSON);
-        await fetch("/api/createLevel", { method: "POST", body: JSON.stringify({ levelJSON: { ...levelJSON, adventureName } }) });
+        await fetch("/api/createLevel", { method: "POST", body: JSON.stringify({ levelJSON: { ...levelJSON, adventureName, index: levelNumber } }) });
     }
 
     return (
@@ -184,7 +184,7 @@ export default function Display() {
                                 <Option key={index} onClick={() => setTextures({ ...textures, tile: index })} textureURL={textureURL[0]}></Option>
                             ))}
                             {mode === "structure" && structures.map((textureURL, index) => (
-                                <Option key={index} onClick={() => setTextures({ ...textures, structure: index })} textureURL={textureURL}></Option>
+                                <Option key={index} onClick={() => setTextures({ ...textures, structure: index })} textureURL={textureURL[0]}></Option>
                             ))}
                             {mode === "entity" && entities.map((textureURL, index) => (
                                 <Option key={index} onClick={() => setTextures({ ...textures, entity: index })} textureURL={textureURL}></Option>

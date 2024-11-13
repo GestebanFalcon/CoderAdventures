@@ -9,41 +9,42 @@ export async function GET(req: NextRequest, { params }: { params: { index: strin
     if (!parseInt(params.index)) {
         return NextResponse.json({ error: "Missing Data: index" }, { status: 400 });
     }
+    try {
+        const level = await prisma.level.findFirst({
+            where: {
+
+                index: parseInt(params.index),
+
+                adventureName: params.adventureName
 
 
-    const level = await prisma.level.findFirst({
-        where: {
-            AND: [
-                {
-                    index: parseInt(params.index)
-                },
-                {
-                    adventureName: params.adventureName
-                }
-            ]
+            }
+        });
+
+        const tileList = await prisma.tile.findMany({
+            where: {
+                LevelId: level?.id
+            },
+            include: {
+                entities: true,
+                structure: true
+            },
+        });
+
+
+
+        const fullLevel = { ...level, tiles: tileList };
+
+        console.log("level");
+        console.log(level);
+
+        if (!fullLevel) {
+            return NextResponse.json({ error: "Level does not exist" }, { status: 404 });
         }
-    });
 
-    const tileList = await prisma.tile.findMany({
-        where: {
-            LevelId: level?.id
-        },
-        include: {
-            entities: true,
-            structure: true
-        },
-    });
-
-
-
-    const fullLevel = { ...level, tiles: tileList };
-
-    console.log("level");
-    console.log(level);
-
-    if (!fullLevel) {
+        return NextResponse.json({ levelJSON: fullLevel }, { status: 200 });
+    } catch (err) {
         return NextResponse.json({ error: "Level does not exist" }, { status: 404 });
     }
 
-    return NextResponse.json({ levelJSON: fullLevel }, { status: 200 });
 }
