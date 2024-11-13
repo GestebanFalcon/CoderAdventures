@@ -120,7 +120,7 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
         }
     }
     javascriptGenerator.forBlock['shake'] = function (block: Blockly.Block, generator: Blockly.Generator) {
-        const code = `testDelay();`
+        const code = `shakeTree();`
         return code
     }
 
@@ -253,7 +253,7 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
         interpreter.setProperty(globalObject, 'moveDown', interpreter.createNativeFunction(wrapper));
 
         wrapper = function inventoryItem() {
-            return ("mango");
+            return (level.mainCharacter.getHeldItem());
         }
         interpreter.setProperty(globalObject, 'inventoryItem', interpreter.createNativeFunction(wrapper));
 
@@ -289,9 +289,10 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
         const myInterpreter = new Interpreter(code, initApi);
         function nextStep() {
             if (myInterpreter.step()) {
-                setTimeout(nextStep, 10);
+                setTimeout(nextStep, 100);
             }
         }
+        myInterpreter.step()
         nextStep();
 
         // eval(code);

@@ -32,6 +32,7 @@ export default class Tree extends Structure {
     }
 
     shake(): undefined | Fruit {
+        console.log("shaking")
         if (this.fruitCount === 0) {
             return;
         }
@@ -39,10 +40,11 @@ export default class Tree extends Structure {
         //     return;
         // }
         this.fruitCount--;
+        const type = this.fruitOrder ? this.fruitOrder[(this.fruitCount % this.fruitOrder.length)] : this.type
+        console.log(`type: ${type}`);
         const fruit = new Fruit({
-            type: (this.fruitOrder ? (
-                this.fruitOrder[(this.fruitCount % this.fruitOrder.length)]
-            ) : this.type)
+            type: type
+
         });
         return (fruit);
     }

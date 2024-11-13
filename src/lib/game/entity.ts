@@ -60,6 +60,7 @@ export default class Entity {
     public async render() {
 
         await Assets.load(this.textures);
+        this.openTexture && await Assets.load(this.openTexture);
         console.log("loaded texture of" + this);
         if (this.sprite) {
             this.deRender();
@@ -226,7 +227,11 @@ export default class Entity {
 
         }
     }
+    public getHeldItem() {
+        return this.heldItem;
+    }
     public shakeTreeBeta(): string {
+        console.log("you aint even the fart")
         if (this.getTile()?.structure?.shake) {
 
             console.log("is tree");
@@ -234,13 +239,15 @@ export default class Entity {
             const fruit: Fruit = this.getTile()?.structure!.shake!();
             //typescript when i literally just checked for it O:
             if (fruit) {
-                this.openTexture && (this.sprite.texture = Texture.from(this.openTexture))
+                console.log(this.openTexture)
+                this.openTexture && (this.sprite.texture = Texture.from(this.openTexture));
+                this.heldItem = fruit;
                 setTimeout(() => {
-                    this.inventory.push(fruit);
-                }, 200)
+                    this.sprite.texture = Texture.from(this.texture);
+                }, 400)
                 console.log(fruit);
                 console.log(this.inventory);
-                this.sprite.texture = Texture.from(this.texture);
+
                 return fruit.getType();
 
             } else {
