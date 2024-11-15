@@ -25,7 +25,7 @@ export default class Entity {
     private health: number;
     private maxHealth: number;
     private inventory: Fruit[];
-    private heldItem?: Fruit;
+    private heldItem?: Fruit | string;
     private dimensions?: [number, number];
     private openTexture?: string;
 
@@ -230,7 +230,10 @@ export default class Entity {
     public getHeldItem() {
         return this.heldItem;
     }
-    public shakeTreeBeta(): string {
+    public setHeldItem(fruit: Fruit | undefined) {
+        this.heldItem = fruit;
+    }
+    public shakeTreeBeta(): Fruit | undefined {
         console.log("you aint even the fart")
         if (this.getTile()?.structure?.shake) {
 
@@ -241,14 +244,11 @@ export default class Entity {
             if (fruit) {
                 console.log(this.openTexture)
                 this.openTexture && (this.sprite.texture = Texture.from(this.openTexture));
-                this.heldItem = fruit;
                 setTimeout(() => {
                     this.sprite.texture = Texture.from(this.texture);
                 }, 400)
-                console.log(fruit);
-                console.log(this.inventory);
 
-                return fruit.getType();
+                return fruit;
 
             } else {
                 console.log("no fruit :(");
@@ -257,7 +257,7 @@ export default class Entity {
 
 
         }
-        return ("");
+        return;
     }
     public setTileCoords(coords: [number, number]) {
         this.tileCoords = [...coords];

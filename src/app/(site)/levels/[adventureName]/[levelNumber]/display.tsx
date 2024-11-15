@@ -14,6 +14,7 @@ import Tree from "@/lib/game/structure/tree/tree";
 import Tile, { TileType } from "@/lib/game/tile";
 import Link from "next/link";
 import Fruit from "@/lib/game/structure/tree/fruit";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 export default function Display({ oldLevelNumber, adventureName }: { oldLevelNumber: string, adventureName: string }) {
     const levelNumber = parseInt(oldLevelNumber);
@@ -95,7 +96,7 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
 
     }
     javascriptGenerator.forBlock['inventory_item'] = function (block: Blockly.Block, generator: Blockly.Generator) {
-        const code = `inventoryItem()`;
+        const code = `getInventoryItem()`;
         return [code, Order.ATOMIC]
     }
 
@@ -103,6 +104,8 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
         init: function () {
             this.appendValueInput('TEXT')
                 .appendField("Print: ")
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
         }
     }
     javascriptGenerator.forBlock['print'] = function (block: Blockly.Block, generator: Blockly.Generator) {
@@ -114,16 +117,50 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
         init: function () {
             this.appendDummyInput()
                 .appendField("Shake Tree")
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-
+            this.setOutput(true)
         }
     }
     javascriptGenerator.forBlock['shake'] = function (block: Blockly.Block, generator: Blockly.Generator) {
-        const code = `shakeTree();`
-        return code
+        const code = `shakeTree()`
+        return [code, Order.ATOMIC]
     }
 
+    Blockly.Blocks['set_inventory'] = {
+        init: function () {
+            this.appendValueInput('ITEM')
+                .appendField("Pick Up:")
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+        }
+    }
+    javascriptGenerator.forBlock['set_inventory'] = function (block: Blockly.Block, generator: Blockly.Generator) {
+        const item = generator.valueToCode(block, 'ITEM', Order.ATOMIC);
+        const code = `setInventoryItem(${item});`
+        return code;
+    }
+
+    Blockly.Blocks['fruit'] = {
+        init: function () {
+            this.appendEndRowInput()
+                .appendField('Fruit:')
+                .appendField(new Blockly.FieldDropdown([
+                    ['Mango', `mango`],
+                    ['Pear', `pear`],
+                    ['Coconut', `pear`],
+                ]), "TYPE");
+            this.setOutput(true);
+        }
+    }
+    javascriptGenerator.forBlock['fruit'] = function (block: Blockly.Block, generator: Blockly.Generator) {
+        const type = block.getFieldValue('TYPE')
+        return [`"${type}"`, Order.ATOMIC];
+    }
+
+    Blockly.Blocks['eat'] = {
+        init: function () {
+
+        }
+    }
 
     const toolbox = {
         // There are two kinds of toolboxes. The simpler one is a flyout toolbox.
@@ -169,6 +206,14 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
             {
                 kind: 'block',
                 type: 'shake'
+            },
+            {
+                kind: 'block',
+                type: 'set_inventory'
+            },
+            {
+                kind: 'block',
+                type: 'fruit'
             }
 
 
@@ -252,13 +297,18 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
         }
         interpreter.setProperty(globalObject, 'moveDown', interpreter.createNativeFunction(wrapper));
 
-        wrapper = function inventoryItem() {
+        wrapper = function getInventoryItem() {
             return (level.mainCharacter.getHeldItem());
         }
-        interpreter.setProperty(globalObject, 'inventoryItem', interpreter.createNativeFunction(wrapper));
+        interpreter.setProperty(globalObject, 'getInventoryItem', interpreter.createNativeFunction(wrapper));
+
+        var setInventoryItemWrapper = function setInventoryItem(fruit: Fruit | undefined) {
+            return (level.mainCharacter.setHeldItem(fruit));
+        }
+        interpreter.setProperty(globalObject, 'setInventoryItem', interpreter.createNativeFunction(setInventoryItemWrapper));
 
         var shakeTreeWrapper = function shakeTree() {
-            level.shake();
+            return (level.shake()?.getType())
         }
         interpreter.setProperty(globalObject, 'shakeTree', interpreter.createNativeFunction(shakeTreeWrapper));
 
