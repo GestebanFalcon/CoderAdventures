@@ -126,7 +126,7 @@ export default class Entity {
             this.inventory.splice(invSlot, 1);
         }
     }
-    private eat(fruit: Fruit) {
+    public eat(fruit: Fruit) {
         console.log("nom nom nom");
         if (!this.health || !this.maxHealth) {
             console.log('sad');

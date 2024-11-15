@@ -16,6 +16,7 @@ export default function Display() {
 
 
     const [coords, setCoords] = useState([0, 0]);
+    const [winCon, setWinCon] = useState("eatmango")
 
     const [mode, setMode] = useState<"tile" | "structure" | "entity" | "mainCharacter">("tile");
 
@@ -114,7 +115,10 @@ export default function Display() {
     } //, [mode, textures, level]);
     useEffect(() => {
         level.setWinCon(`move${winCoords[0]}${winCoords[1]}`);
-    }, [winCoords])
+    }, [winCoords]);
+    useEffect(() => {
+        level.setWinCon(winCon);
+    }, [winCon])
     useEffect(() => {
 
         const pixiInit = async () => {
@@ -175,6 +179,7 @@ export default function Display() {
                         <input type="number" value={coords[1]} onChange={(e) => { setCoords([coords[0], parseInt(e.target.value)]) }}></input>
                         <input className="mt-8" type="number" value={winCoords[0]} onChange={(e) => { setWinCoords([parseInt(e.target.value), winCoords[1]]) }}></input>
                         <input type="number" value={winCoords[1]} onChange={(e) => { setWinCoords([winCoords[0], parseInt(e.target.value)]) }}></input>
+                        <input type="text" value={winCon} onChange={(e) => { setWinCon(e.target.value) }}></input>
                     </div>
 
 

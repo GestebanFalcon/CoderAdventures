@@ -8,6 +8,7 @@ import { TreeType } from "./structure/tree/tree";
 import { Direction } from "./entity";
 // import levels from "./levels/levels";
 import { Dispatch, SetStateAction } from "react";
+import Fruit from "./structure/tree/fruit";
 
 export type LevelJSON = {
     tiles: TileJSON[],
@@ -57,7 +58,7 @@ export default class Level {
 
     //eventually, setup will also include things such as configuring unique blockly setups and attaching them to their resultant outputs. These setups should not reload every time. 
 
-    //Fuck what i just said. The blocks will be part of the level object itself passed into as an input. therefore they arent tied to the setup function and just chill there each time. The only thing that needs to change is the character they control as an input
+    //(bad word) what i just said. The blocks will be part of the level object itself passed into as an input. therefore they arent tied to the setup function and just chill there each time. The only thing that needs to change is the character they control as an input
 
     // mango mango mango mango badum bam badum bam
     //and dont you know how sweet it tastes dont you know how sweet it tastes and dont you know how sweet it tastes now that im without yououuuuuuuuu i love newjeans
@@ -92,7 +93,19 @@ export default class Level {
     public async renderBoard() {
         await this.board.render();
     }
+    public eat(fruit: Fruit) {
 
+        const fruitType = fruit.getType();
+
+        if (this.winCon.substring(0, 3) === "eat") {
+            const type = this.winCon.substring(3);
+            if (fruitType === type) {
+                this.setIsComplete(true);
+            }
+        }
+
+        this.mainCharacter.eat(fruit);
+    }
     public move(direction: string) {
         this.mainCharacter.move(direction);
         console.log(this.mainCharacter.getTileCoords());

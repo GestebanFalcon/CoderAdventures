@@ -158,8 +158,14 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
 
     Blockly.Blocks['eat'] = {
         init: function () {
-
+            this.appendValueInput('FRUIT')
+                .appendField("Eat:")
         }
+    }
+    javascriptGenerator.forBlock['eat'] = function (block: Blockly.Block, generator: Blockly.Generator) {
+        const fruit = generator.valueToCode(block, 'FRUIT', Order.ATOMIC);
+        const code = `eat(${fruit})`;
+        return code;
     }
 
     const toolbox = {
@@ -214,6 +220,10 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
             {
                 kind: 'block',
                 type: 'fruit'
+            },
+            {
+                kind: 'block',
+                type: 'eat'
             }
 
 
@@ -296,6 +306,12 @@ export default function Display({ oldLevelNumber, adventureName }: { oldLevelNum
             return (level.move("down"));
         }
         interpreter.setProperty(globalObject, 'moveDown', interpreter.createNativeFunction(wrapper));
+
+        var eatWrapper = function eat(fruit: string) {
+            const newFruit = new Fruit({ type: fruit });
+            return (level.eat(newFruit));
+        }
+        interpreter.setProperty(globalObject, 'eat', interpreter.createNativeFunction(eatWrapper));
 
         wrapper = function getInventoryItem() {
             return (level.mainCharacter.getHeldItem());
