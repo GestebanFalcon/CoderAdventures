@@ -47,7 +47,7 @@ export default class Level {
         //     this.setup = levels[0];
         // }
         this.board = (board ? board : new Board({ app, dimensions }));
-        this.mainCharacter = (mainCharacter ? mainCharacter : new Entity({ maxHealth: 30, board: this.board, app: this.app, texture: "https://i.postimg.cc/50jSSKGS/robot-Small.png", me: true }));
+        this.mainCharacter = (mainCharacter ? mainCharacter : new Entity({ maxHealth: 30, board: this.board, app: this.app, texture: "/robotSmall.png", me: true }));
         this.startingCoords = this.mainCharacter.getTileCoords();
         this.startingBoard = new Board({ app, dimensions });
         this.startingBoard.cloneFrom(this.board);

@@ -6,7 +6,7 @@ export default function LevelNavbar() {
         <nav className="flex h-20 w-full bg-sky-200 shadow-md">
             <div id="links" className="ml-12 mr-auto h-full flex justify-center items-center text-yellow-500 text-xl">
                 <Link href="/info" className="flex  justify-center items-center mx-8 font-semibold text-2xl">
-                    <img src="https://i.postimg.cc/zvvGXfMY/palmTree.png" className=" object-scale-down h-12 mx-2"></img>
+                    <img src="/palmTree.png" className=" object-scale-down h-12 mx-2"></img>
                 </Link>
                 {/* <Link href="/levels/editor/?levelNumber=1">Edit</Link> */}
             </div>

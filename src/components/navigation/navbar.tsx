@@ -5,7 +5,7 @@ export default function Navbar() {
         <nav className="flex h-20 w-full bg-sky-200 shadow-md">
             <div id="links" className="ml-12 mr-auto h-full flex justify-center items-center text-yellow-500 text-lg font-medium gap-2">
                 <Link href="/info" className="flex  justify-center items-center mx-8 font-medium">
-                    <img src="https://i.postimg.cc/zvvGXfMY/palmTree.png" className=" object-scale-down h-12"></img>
+                    <img src="/palmTree.png" className=" object-scale-down h-12"></img>
                 </Link>
                 <Link href="/info/map" >Roadmap</Link>
             </div>

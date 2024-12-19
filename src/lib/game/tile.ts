@@ -65,7 +65,7 @@ export default class Tile {
         //should only run if no return earlier
         this.texture = "/"
         if (type === TileType.GROUND) {
-            this.texture = "https://i.postimg.cc/GmXnNZB0/sandBase.png";
+            this.texture = "/sandBase.png";
         }
         if (type === TileType.WALL) {
             this.texture = "/"

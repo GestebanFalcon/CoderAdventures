@@ -10,7 +10,7 @@ export default function Info() {
                     <Link href="/info/code"><div className=" text-xl font-medium rounded-full bg-blue-950 text-yellow-100 p-4">Start Now!</div></Link>
                 </section>
                 <section className="w-2/5 px-16 pt-0">
-                    <img src="https://i.postimg.cc/y604BJJy/robot.png" className=" h-full w-full object-contain scale-x-[-1]"></img>
+                    <img src="/robot .png" className=" h-full w-full object-contain scale-x-[-1]"></img>
                 </section>
             </div>
 

@@ -26,7 +26,7 @@ export default class Board {
                 this.board[i] = []
                 for (let j = 0; j < dimensions[1]; j++) {
                     currentTile = tileList[(i * dimensions[1]) + j];
-                    const entitiesList = currentTile.entities.map(entity => new Entity({ app, board: this, maxHealth: entity.maxHealth, texture: entity.texture, me: entity.mainCharacter, startingCoords: [i, j], openTexture: "https://i.postimg.cc/WzGQ7KRH/robot-torso-open-1.png" }));
+                    const entitiesList = currentTile.entities.map(entity => new Entity({ app, board: this, maxHealth: entity.maxHealth, texture: entity.texture, me: entity.mainCharacter, startingCoords: [i, j], openTexture: "/robotTorsoOpen(1).png" }));
                     const options: { board: Board, type: TileType, textureURL: string, entities: Entity[], structure?: Structure } = {
                         board: this,
                         type: TileType[currentTile.type],
