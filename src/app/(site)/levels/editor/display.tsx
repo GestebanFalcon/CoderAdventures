@@ -28,7 +28,7 @@ export default function Display() {
     })
 
 
-    const tiles: [string, TileType][] = [["/waterBase.png", TileType.VOID], ["/sandBase.png", TileType.GROUND], ["/sandCoastFullRight.png", TileType.GROUND], ["/sandCoastFullBottom.png", TileType.GROUND], ["/sandCoastOutTopLeft.png", TileType.GROUND], ["/sandCoastBottomRight.png", TileType.GROUND], ["/sandCoastFullMiddle.png", TileType.GROUND], ["/sandCoastFullTop.png", TileType.GROUND], ["/grassBase.png", TileType.GROUND], ["/grassOnSandFullRight.png", TileType.GROUND]];
+    const tiles: [string, TileType][] = [["/waterBase.png", TileType.VOID], ["/sandBase.png", TileType.GROUND], ["/sandCoastFullRight.png", TileType.GROUND], ["/sandCoastFullBottom.png", TileType.GROUND], ["/sandCoastOutTopLeft.png", TileType.GROUND], ["/sandCoastBottomRight.png", TileType.GROUND], ["/coastBottomLeft.png", TileType.GROUND], ["/coastTopLeft.png", TileType.GROUND],  ["/coastTopRight.png", TileType.GROUND],["/sandCoastFullMiddle.png", TileType.GROUND], ["/sandCoastFullTop.png", TileType.GROUND], ["/grassBase.png", TileType.GROUND], ["/grassOnSandFullRight.png", TileType.GROUND]];
     const structures: [string, string[]?][] = [["https://i.postimg.cc/rmXbRc1v/johnathmald.png"], ["https://static.vecteezy.com/system/resources/thumbnails/026/795/005/small/mango-fruit-tropical-transparent-png.png"], ["https://i.postimg.cc/zvvGXfMY/palmTree.png"], ["https://i.postimg.cc/zvvGXfMY/palmTree.png", ["pear", "mango", "coconut"]]]
     const entities = ["https://i.postimg.cc/rmXbRc1v/johnathmald.png"]
 
